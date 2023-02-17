@@ -29,7 +29,7 @@ jobs:
           source_repo: "langnang-temp/root" # 源仓库
           source_branch: "master" # 源仓库分支
           destination_branch: "parent-master" # 当前仓库分支
-          github_token: ${{ secrets.PAT }}
+          github_token: ${{ secrets.ACCESS_TOKEN }}
 ```
 
 ```mermaid

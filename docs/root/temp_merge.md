@@ -21,21 +21,21 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Merge parent -> develop
-        uses: devmasx/merge-branch@master
-        with:
-          type: now
-          from_branch: "parent-master"
-          target_branch: "develop"
-          github_token: ${{ github.GITHUB_TOKEN }}
-
       - name: Merge parent -> master
         uses: devmasx/merge-branch@master
         with:
           type: now
           from_branch: "parent-master"
           target_branch: "master"
-          github_token: ${{ github.GITHUB_TOKEN }}
+          github_token: ${{ github.ACCESS_TOKEN }}
+
+      - name: Merge parent -> develop
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: "parent-master"
+          target_branch: "develop"
+          github_token: ${{ github.ACCESS_TOKEN }}
 ```
 
 ```mermaid
