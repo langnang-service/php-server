@@ -53,8 +53,18 @@ $router->addGroup("/api", function (FastRoute\RouteCollector $router) {
 
   // require swagger apis
   foreach (scandir(__DIR__ . '/../modules') as $path) {
-    if (is_dir(__DIR__ . '/../modules/' . $path) && file_exists(__DIR__ . '/../modules/' . $path . '/api.php')) {
-      require_once __DIR__ . '/../modules/' . $path . '/api.php';
+    if (is_dir(__DIR__ . '/../modules/' . $path)) {
+      if (file_exists(__DIR__ . '/../modules/' . $path . '/api.php')) {
+        // level 1
+        require_once __DIR__ . '/../modules/' . $path . '/api.php';
+      } else {
+        // level 2
+        foreach (scandir(__DIR__ . '/../modules/' . $path) as $pat) {
+          if (file_exists(__DIR__ . '/../modules/' . $path . "/" . $pat . '/api.php')) {
+            require_once __DIR__ . '/../modules/' . $path . "/" . $pat . '/api.php';
+          }
+        }
+      }
     }
   }
 });

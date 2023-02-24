@@ -13,17 +13,19 @@ function timestamp(): int
 
 /**
  * 遍历加载文件夹下文件
+ * @param string $path
+ * @param function $callback
  */
-function require_path($path, $callback)
+function require_path($path, $filter)
 {
   if (is_dir($path)) {
     foreach (scandir($path) as $_path) {
       if (!in_array($_path, ['.', '..'])) {
-        require_path($path . '/' . $_path, $callback);
+        require_path($path . '/' . $_path, $filter);
       }
     }
   } else {
-    if (pathinfo($path)['extension'] === 'php' && $callback(pathinfo($path))) {
+    if (pathinfo($path)['extension'] === 'php' && $filter(pathinfo($path))) {
       require_once $path;
     }
   }
