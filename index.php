@@ -86,7 +86,6 @@ switch ($routeInfo[0]) {
     break;
   case FastRoute\Dispatcher::FOUND:
     $handler = $routeInfo[1];
-
     // Request Verify
     if ($_CONFIG['request_verify'] === true && in_array($httpMethod, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
       if (!in_array($uri, $_CONFIG['request_verify_ignore_urls'])) {
@@ -114,6 +113,8 @@ switch ($routeInfo[0]) {
       "_path" => $uri,
       "_files" => $_FILES,
       "_user" => $user,
+      "_get" => $_GET,
+      "_post" => $_POST,
     ], $_GET, $_POST, $routeInfo[2],);
 
     // ... call $handler with $vars

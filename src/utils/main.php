@@ -171,3 +171,9 @@ function read_excel()
 function write_excel()
 {
 }
+
+
+function call_handler($uri, $httpMethod)
+{
+  global $dispatcher, $_CONFIG;
+}

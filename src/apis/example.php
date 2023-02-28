@@ -202,7 +202,10 @@ $router->addRoute('GET', '/faker/{method}', function ($vars) {
  * )
  */
 $router->addRoute("POST", "/request", function ($vars) {
-  $result = request($vars);
+  var_dump($vars["_post"]);
+  $result = request(["url" => "http://127.0.0.1:31001/?/api/faker/uuid"]);
+  var_dump($result);
+  // $result = request($vars);
   $result['data'] = $result['body'];
   /** */
   header('Content-Type: application/json');
