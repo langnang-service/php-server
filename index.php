@@ -114,6 +114,8 @@ switch ($routeInfo[0]) {
       "_path" => $uri,
       "_files" => $_FILES,
       "_user" => $user,
+      "_get" => $_GET,
+      "_post" => $_POST,
     ], $_GET, $_POST, $routeInfo[2],);
 
     // ... call $handler with $vars
