@@ -1,26 +1,29 @@
 <?php
 global $_SWAGGER;
-$module = "typecho/content";
+$module = "quote";
 array_push($_SWAGGER, ["name" => "{$module}", "url" => "/?/api/swagger/{$module}", "path" => __DIR__]);
 
+use Langnang\Module\Api\Api;
 use Langnang\Module\Content\Content;
+use Langnang\Module\Quote\Quote;
+use WpOrg\Requests\Requests;
 
 require_once __DIR__ . '/controllers.php';
 /**
  * @OA\Info(
- *   title="Content APIs",
- *   description="Content API",
+ *   title="Quote APIs",
+ *   description="Quote API",
  *   version="0.0.1",
  * )
  */
 $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
-  $controller = new Content();
+  $controller = new Quote();
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/insert",
+   *     path="/api/quote/insert",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),     
    *     @OA\Response(response="200", description="")
    * )
@@ -28,10 +31,10 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/delete",
+   *     path="/api/quote/delete",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
@@ -39,10 +42,10 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/update",
+   *     path="/api/quote/update",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
@@ -50,10 +53,10 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/update', [$controller, 'update_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/count",
+   *     path="/api/quote/count",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
@@ -61,10 +64,10 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/count', [$controller, 'select_count']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/list",
+   *     path="/api/quote/list",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
@@ -72,10 +75,10 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/list', [$controller, 'select_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/tree",
+   *     path="/api/quote/tree",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
@@ -83,13 +86,20 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/tree', [$controller, 'select_tree']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/content/info",
+   *     path="/api/quote/info",
    *     @OA\RequestBody(
    *         required=true,
-   *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
+   *         @OA\JsonContent(ref="#/components/schemas/QuoteModel")
    *     ),
    *     @OA\Response(response="200", description="")
    * )
    */
   $router->addRoute('POST', '/info', [$controller, 'select_item']);
+  /**
+   * @OA\Get(
+   *     path="/api/quote/rand",
+   *     @OA\Response(response="200", description="")
+   * )
+   */
+  $router->addRoute('GET', '/rand', [$controller, 'crawler_rand']);
 });

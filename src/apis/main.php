@@ -60,7 +60,7 @@ $router->addGroup("/api", function (FastRoute\RouteCollector $router) {
       } else {
         // level 2
         foreach (scandir(__DIR__ . '/../modules/' . $path) as $pat) {
-          if (file_exists(__DIR__ . '/../modules/' . $path . "/" . $pat . '/api.php')) {
+          if (is_dir(__DIR__ . '/../modules/' . $path . "/" . $pat) && file_exists(__DIR__ . '/../modules/' . $path . "/" . $pat . '/api.php')) {
             require_once __DIR__ . '/../modules/' . $path . "/" . $pat . '/api.php';
           }
         }

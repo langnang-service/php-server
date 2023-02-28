@@ -17,7 +17,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $controller = new Option();
   /**
    * @OA\Post(
-   *     path="/api/typecho/option/insert",
+   *     path="/api/option/insert",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/OptionModel")
@@ -28,7 +28,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/option/delete",
+   *     path="/api/option/delete",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/OptionModel")
@@ -39,7 +39,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/option/update",
+   *     path="/api/option/update",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/OptionModel")
@@ -50,7 +50,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/update', [$controller, 'update_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/option/list",
+   *     path="/api/option/list",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/OptionModel")
@@ -61,7 +61,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/list', [$controller, 'select_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/option/info",
+   *     path="/api/option/info",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/OptionModel")

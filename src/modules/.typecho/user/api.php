@@ -17,7 +17,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $controller = new User();
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/login",
+   *     path="/api/user/login",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\MediaType(
@@ -34,7 +34,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/login', [$controller, 'login']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/logout",
+   *     path="/api/user/logout",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\MediaType(
@@ -50,7 +50,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/logout', [$controller, 'logout']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/insert",
+   *     path="/api/user/insert",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/UserModel")
@@ -61,7 +61,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/delete",
+   *     path="/api/user/delete",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/UserModel")
@@ -72,7 +72,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/update",
+   *     path="/api/user/update",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/UserModel")
@@ -83,7 +83,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/update', [$controller, 'update_item']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/count",
+   *     path="/api/user/count",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/UserModel")
@@ -94,7 +94,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/count', [$controller, 'select_count']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/list",
+   *     path="/api/user/list",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\MediaType(
@@ -110,7 +110,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/list', [$controller, 'select_list']);
   /**
    * @OA\Post(
-   *     path="/api/typecho/user/info",
+   *     path="/api/user/info",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\MediaType(

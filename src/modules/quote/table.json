@@ -1,0 +1,28 @@
+{
+  "name": "quotes",
+  "columns": [
+    {
+      "name": "id",
+      "type": "int(10)",
+      "comment": "序号",
+      "order": -1
+    },
+    {
+      "name": "text",
+      "type": "text",
+      "comment": "内容"
+    },
+    {
+      "name": "type",
+      "type": "varchar(32)"
+    },
+    {
+      "name": "author",
+      "type": "varchar(32)"
+    },
+    {
+      "name": "create_time",
+      "type": "timestamp"
+    }
+  ]
+}
