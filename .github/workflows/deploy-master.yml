@@ -27,3 +27,9 @@ jobs:
           password: ${{ secrets.ftp_password }}
           # Path to upload to on the server. Must end with trailing slash /
           server-dir: /langnang.ml/htdocs/src/modules/
+          #
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**

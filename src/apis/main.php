@@ -2,6 +2,7 @@
 
 global $_SWAGGER;
 $module = "main";
+
 // array_push($_SWAGGER, ["name" => "{$module}", "url" => "/?/api/swagger/{$module}", "path" => __FILE__]);
 
 /**
@@ -68,3 +69,10 @@ $router->addGroup("/api", function (FastRoute\RouteCollector $router) {
     }
   }
 });
+if (is_dir(__DIR__ . '/../../vendor/zircote/swagger-php/Examples')) {
+  foreach (scandir(__DIR__ . '/../../vendor/zircote/swagger-php/Examples') as $path) {
+    if (is_dir(__DIR__ . "/../../vendor/zircote/swagger-php/Examples/{$path}") && !in_array($path, [".", ".."])) {
+      array_push($_SWAGGER, ["name" => "example/{$path}", "url" => "/?/api/swagger/example/{$path}", "path" => __DIR__ . "/../../vendor/zircote/swagger-php/Examples/{$path}"]);
+    }
+  }
+}
