@@ -152,9 +152,42 @@ class RootController extends RootModel
 
     return $result;
   }
+  // 执行操作>>批量新增树状数据
+  function execute_insert_tree(array $vars)
+  {
+  }
+  function insert_tree(array $vars)
+  {
+  }
 
+  function execute_delete_item(array $vars)
+  {
+    global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
 
-  // 执行操作>>批量查询
+    $sql_delete_item = $this->_table->generate_delete_item($vars);
+    $_API_LOGGER->debug(__METHOD__, array('var'  => 'sql_delete_item', 'value'  => $sql_delete_item, "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
+
+    $result = $_CONNECTION->executeQuery($sql_delete_item);
+    $_API_LOGGER->debug(__METHOD__, array('var'  => 'execute::sql_delete_item', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
+
+    $_API_LOGGER->debug(__METHOD__, array('var'  => 'result', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
+    return $result;
+  }
+  // TODO
+  function delete_item(array $vars)
+  {
+    global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
+    $vars = $this->before(__FUNCTION__, $vars);
+    $this->set__table(json_decode(file_get_contents($this->_table_path), true));
+
+    if ($this->_table->primary_key_exists($vars) !== true) throw new Exception("empty primary key ({$this->_table->primary_key_exists($vars)}).");
+
+    $result = $this->execute_delete_item($vars);
+    $_API_LOGGER->debug(__METHOD__, array('var'  => 'result', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
+    return $result;
+  }
+
+  // 执行操作>>批量删除
   function execute_delete_list(array $vars)
   {
     global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
@@ -164,7 +197,6 @@ class RootController extends RootModel
 
     $result = $_CONNECTION->executeQuery($sql_delete_list);
     $_API_LOGGER->debug(__METHOD__, array('var'  => 'execute::sql_delete_list', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
-
     $_API_LOGGER->debug(__METHOD__, array('var'  => 'result', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
     return $result;
   }
