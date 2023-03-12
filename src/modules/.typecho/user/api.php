@@ -14,7 +14,6 @@ require_once __DIR__ . '/controllers.php';
  * )
  */
 $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
-  $controller = new User();
   /**
    * @OA\Post(
    *     path="/api/typecho/user/login",
@@ -31,7 +30,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/login', [$controller, 'login']);
+  $router->addRoute('POST', '/login', [new User(), 'login']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/logout",
@@ -47,7 +46,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/logout', [$controller, 'logout']);
+  $router->addRoute('POST', '/logout', [new User(), 'logout']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/insert",
@@ -58,7 +57,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
+  $router->addRoute('POST', '/insert', [new User(), 'insert_item']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/delete",
@@ -69,7 +68,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
+  $router->addRoute('POST', '/delete', [new User(), 'delete_list']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/update",
@@ -80,7 +79,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/update', [$controller, 'update_item']);
+  $router->addRoute('POST', '/update', [new User(), 'update_item']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/count",
@@ -91,7 +90,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/count', [$controller, 'select_count']);
+  $router->addRoute('POST', '/count', [new User(), 'select_count']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/list",
@@ -107,7 +106,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/list', [$controller, 'select_list']);
+  $router->addRoute('POST', '/list', [new User(), 'select_list']);
   /**
    * @OA\Post(
    *     path="/api/typecho/user/info",
@@ -123,5 +122,5 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
    *     @OA\Response(response="200", description="")
    * )
    */
-  $router->addRoute('POST', '/info', [$controller, 'select_item']);
+  $router->addRoute('POST', '/info', [new User(), 'select_item']);
 });

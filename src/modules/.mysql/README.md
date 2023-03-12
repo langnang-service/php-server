@@ -82,13 +82,9 @@
 | generate_update_table        | 根据列结构生成改表语句   |
 | generate_select_columns      | 查询表结构               |
 | generate_insert_item         | 生成单条插入语句         |
-| generate_insert_list         | 生成批量插入语句         |
-| generate_insert_tree         | 生成树状插入语句         |
-| generate_delete_item         | 生成单条删除语句         |
+| generate_insert_list         |                          |
 | generate_delete_list         | 生成批量删除语句         |
-| generate_delete_tree         | 生成树状删除语句         |
 | generate_update_item         | 生成单条修改语句         |
-| generate_update_list         | 生成批量修改语句         |
 | generate_select_list         | 生成多条查表语句         |
 | generate_select_item         | 生成单条查表语句         |
 | generate_select_count        | 生成计数查表语句         |
