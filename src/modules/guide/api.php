@@ -1,11 +1,13 @@
 <?php
 
-
 global $_SWAGGER;
 $module = "guide";
 array_push($_SWAGGER, ["name" => "{$module}", "url" => "/?/api/swagger/{$module}", "path" => __DIR__]);
 
 use Langnang\Module\Root\RootController;
+
+use phpspider\core\requests;
+use phpspider\core\selector;
 
 require_once __DIR__ . '/../.mysql/mysql.php';
 // require_once __DIR__ . '/models.php';
@@ -14,6 +16,15 @@ class Guide extends RootController
 {
   protected $_class = __CLASS__;
   protected $_table_path = __DIR__ . '/table.json';
+
+
+  function before($method, $vars)
+  {
+    if (!isset($vars['_user']) && in_array($method, ['select_list', 'select_item', 'select_tree'])) {
+      $vars['status'] = 'public';
+    }
+    return $vars;
+  }
 }
 
 /**
@@ -48,6 +59,21 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) use 
   $router->addRoute('POST', '/delete_item', [new Guide(), 'delete_item']);
   $router->addRoute('POST', '/delete_list', [new Guide(), 'delete_list']);
   $router->addRoute('POST', '/update_item', [new Guide(), 'update_item']);
+  $router->addRoute('POST', '/crawler', function ($vars) {
+    $url = $vars['url'];
+    $html = requests::get($url);
+    $title = selector::select($html, "//head/title");
+    $metas = selector::select($html, "//head/meta");
+    $icons = selector::select($html, "//head/link[contains(@rel,'icon')]");
+    $icons = array_map(function ($item) {
+      return ["link" => selector::select($item, "/@href")];
+    }, (array)$icons);
+    return [
+      "title" => $title,
+      "icons" => $icons,
+      "metas" => $metas,
+    ];
+  });
   /**
    * @OA\Post(
    *     path="/api/guide/select_list",

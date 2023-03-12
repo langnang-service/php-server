@@ -64,6 +64,11 @@
       "modifiable": true
     },
     {
+      "name": "status",
+      "type": "string",
+      "condition": "IN ( '?' )"
+    },
+    {
       "name": "count",
       "type": "int"
     },
