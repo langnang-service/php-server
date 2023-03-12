@@ -1,0 +1,97 @@
+<?php
+
+
+global $_SWAGGER;
+$module = "guide";
+array_push($_SWAGGER, ["name" => "{$module}", "url" => "/?/api/swagger/{$module}", "path" => __DIR__]);
+
+use Langnang\Module\Root\RootController;
+
+require_once __DIR__ . '/../.mysql/mysql.php';
+// require_once __DIR__ . '/models.php';
+
+class Guide extends RootController
+{
+  protected $_class = __CLASS__;
+  protected $_table_path = __DIR__ . '/table.json';
+}
+
+/**
+ * @OA\Info(
+ *   title="guide APIs",
+ *   description="guide APIs",
+ *   version="0.0.1",
+ * )
+ */
+$router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) use ($module) {
+
+
+  $router->addRoute('GET', '/initialize', function ($vars) use ($module) {
+    global $_TWIG, $_CONNECTION, $_CONFIG;
+    $template = $_TWIG->load("{$module}/{$module}.sql");
+    $sql = $template->renderBlock("initialize", ["dbname" => $_CONFIG['db']['dbname'], "prefix" => $_CONFIG['db']['prefix']]);
+    print($sql);
+  });
+
+  $router->addRoute('GET', '/cleanup', function ($vars) use ($module) {
+    global $_TWIG, $_CONNECTION;
+    $template = $_TWIG->load("{$module}/{$module}.sql");
+  });
+
+  // $meta = new GuideMeta();
+  // $content = new GuideContent();
+  // $root_meta = $meta->select_item(["type" => "branch", "slug" => "guide"]);
+  // $root_content = $content->select_item(["type" => "branch", "slug" => "guide"]);
+  // $root = ["mid" => $root_meta["mid"], "cid" => $root_content["cid"]];
+  // var_dump($root);
+  $router->addRoute('POST', '/insert_item', [new Guide(), 'insert_item']);
+  $router->addRoute('POST', '/delete_item', [new Guide(), 'delete_item']);
+  $router->addRoute('POST', '/delete_list', [new Guide(), 'delete_list']);
+  $router->addRoute('POST', '/update_item', [new Guide(), 'update_item']);
+  /**
+   * @OA\Post(
+   *     path="/api/guide/select_list",
+   *     @OA\RequestBody(
+   *         @OA\MediaType(
+   *             mediaType="application/json",
+   *             @OA\Schema(
+   *                 @OA\Property(
+   *                     property="parent",
+   *                     type="integer",
+   *                 ),
+   *                 @OA\Property(
+   *                     property="type",
+   *                     type="string"
+   *                 ),
+   *                 example={"parent": 0, "type": "category"}
+   *             )
+   *         )
+   *     ),
+   *     @OA\Response(response="200", description="")
+   * )
+   */
+  $router->addRoute('POST', '/select_list', [new Guide(), 'select_list']);
+  /**
+   * @OA\Post(
+   *     path="/api/guide/select_tree",
+   *     @OA\RequestBody(
+   *         @OA\MediaType(
+   *             mediaType="application/json",
+   *             @OA\Schema(
+   *                 @OA\Property(
+   *                     property="parent",
+   *                     type="integer",
+   *                 ),
+   *                 @OA\Property(
+   *                     property="type",
+   *                     type="object",
+   *                 ),
+   *                 example={"parent": 0, "type": "category"}
+   *             )
+   *         )
+   *     ),
+   *     @OA\Response(response="200", description="")
+   * )
+   */
+  $router->addRoute('POST', '/select_tree', [new Guide(), 'select_tree']);
+});

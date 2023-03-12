@@ -31,6 +31,9 @@ $_FAKER = Faker\Factory::create();
 /** swagger */
 $_SWAGGER = [];
 
+$_TWIG = new \Twig\Environment(new \Twig\Loader\FilesystemLoader('src/modules/'), []);
+
+
 // Fetch method and URI from somewhere
 // 请求方式: GET, POST, PUT, PATCH, DELETE, HEAD
 $httpMethod = $_SERVER['REQUEST_METHOD'];
