@@ -29,14 +29,14 @@ class User extends RootController
   {
 
     global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
-
-    $vars['password'] = md5($vars['password']);
-
-    $user = $this->select_item($vars, ['name', 'password']);
-
-    $authCode = md5(json_encode(array_merge($_SERVER, $user)));
-
-    $user['authCode'] = $authCode;
+    if (isset($vars['authCode'])) {
+      $user = $this->select_item($vars, ['authCode']);
+    } else {
+      $vars['password'] = md5($vars['password']);
+      $user = $this->select_item($vars, ['name', 'password']);
+      $authCode = md5(json_encode(array_merge($_SERVER, $user)));
+      $user['authCode'] = $authCode;
+    }
     $user['activated'] = date('Y-m-d H:i:s', time());
     $this->execute_update_item(['uid' => $user['uid'], 'activated' => $user['activated'], 'authCode' => $user['authCode']]);
     return $user;

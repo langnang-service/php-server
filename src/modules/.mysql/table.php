@@ -425,7 +425,7 @@ VALUES
   select t1.*,
     if(find_in_set(`{$parent_key}`, @pids) > 0, @pids := concat(@pids, ',', `{$child_key}`), 
     if (t1.{$child_key} = {$parent}, {$parent}, 0)) as ischild
-  from (select t.* from `{$this->name}` t) t1,
+  from (select t.* from`{$this->name}` t  " . $this->generate_where_condition($row, $this->hierarchical_keys) . " ) t1,
   (select @pids :=  {$parent}) t2
 ) t3 where ischild != 0 ORDER BY {$child_key}, {$parent_key}";
     return $result;
