@@ -1,6 +1,9 @@
 <?php
 
 /** 允许跨域请求 */
+
+use Langnang\Module\User\User;
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, PUT, OPTIONS, PATCH, DELETE');
 header('Access-Control-Allow-Credentials: true');
@@ -72,6 +75,8 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
 $result = null;
 
+
+
 switch ($routeInfo[0]) {
   case FastRoute\Dispatcher::NOT_FOUND:
     // ... 404 Not Found
@@ -90,6 +95,13 @@ switch ($routeInfo[0]) {
   case FastRoute\Dispatcher::FOUND:
     $handler = $routeInfo[1];
     // Request Verify
+    $user = null;
+    if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+      try {
+        $user = call_user_func([new User(), 'login'], ['authCode' => $_SERVER['HTTP_AUTHORIZATION']]);
+      } catch (Exception $e) {
+      }
+    }
     if ($_CONFIG['request_verify'] === true && in_array($httpMethod, ['POST', 'PUT', 'PATCH', 'DELETE'])) {
       if (!in_array($uri, $_CONFIG['request_verify_ignore_urls'])) {
         try {
@@ -118,6 +130,7 @@ switch ($routeInfo[0]) {
       "_user" => $user,
       "_get" => $_GET,
       "_post" => $_POST,
+      "_user" => $user,
     ], $_GET, $_POST, $routeInfo[2],);
 
     // ... call $handler with $vars
