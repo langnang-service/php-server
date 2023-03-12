@@ -311,12 +311,37 @@ VALUES
       return $total . $this->generate_insert_item($row);
     }, "");
   }
+  // 生成单条删除语句
+  function generate_delete_item($row): string
+  {
+    return "";
+  }
   // 生成批量删除语句
   function generate_delete_list($row): string
   {
-    return "DELETE FROM `{$this->name}` WHERE " . substr(array_reduce($this->primary_keys, function ($total, $key) use ($row) {
+    $result = "";
+    // 判断是否所属级联字段
+    $is_hierarchical_keys = array_reduce($this->primary_keys, function ($t, $v) {
+      if (!$t) return false;
+      return in_array($v, $this->hierarchical_keys);
+    }, true);
+    // 更新下属级联字段
+    if ($is_hierarchical_keys) {
+      $child_key = $this->hierarchical_keys[0];
+      $parent_key = $this->hierarchical_keys[1];
+      // 不能在同一语句中，先select出同一表中的某些值，再update这个表，即不能依据某字段值做判断再来更新某字段的值
+      // 解决方法：select 的结果再通过一个中间表 select 多一次，就可以避免这个错误
+      $result .= array_reduce($row[$child_key], function ($total, $v) use ($child_key, $parent_key) {
+        return $total .  "UPDATE `$this->name` 
+           SET `$parent_key` = (SELECT `{$parent_key}` FROM (SELECT `{$parent_key}` FROM `{$this->name}` " . $this->generate_where_condition([$child_key => $v]) . " ) AS `parent_id` )
+            " . $this->generate_where_condition([$parent_key => $v]) . " ;";
+      }, "");
+    }
+    // 删除对应数据
+    $result .= "DELETE FROM `{$this->name}` WHERE " . substr(array_reduce($this->primary_keys, function ($total, $key) use ($row) {
       return $total . " AND " . $this->columns[$key]->generate_delete_list_condition($row[$key]);
     }, ""), 4);
+    return $result;
   }
   // 生成单条修改语句
   function generate_update_item($row): string
@@ -385,18 +410,25 @@ VALUES
   }
   function generate_select_tree(array $row): string
   {
-    if (sizeof($this->hierarchical_keys) !== 2) throw new Exception("the hierarchy keys is not configured.");
+    if (sizeof($this->hierarchical_keys) !== 2) throw new Exception("the hierarchy keys is not configured."); // 未配置父子关联结构键 
     $child_key = $this->hierarchical_keys[0];
     $parent_key = $this->hierarchical_keys[1];
-
-    $parent = $this->columns[$parent_key]->encode_value($row[$parent_key]);
-    return "select t3.* from (
+    // 如果参数中没有对应的父键值
+    if (!isset($row[$parent_key])) {
+      // throw new Exception("the parent key is not set");
+      $select_parent_sql = $this->generate_select_item($row, array_keys($row));
+      $parent = "(" . str_replace("SELECT * FROM", "SELECT `{$child_key}` FROM", $select_parent_sql) . ")";
+    } else {
+      $parent = $this->columns[$parent_key]->encode_value($row[$parent_key]);
+    }
+    $result = "select t3.* from (
   select t1.*,
     if(find_in_set(`{$parent_key}`, @pids) > 0, @pids := concat(@pids, ',', `{$child_key}`), 
     if (t1.{$child_key} = {$parent}, {$parent}, 0)) as ischild
   from (select t.* from `{$this->name}` t) t1,
   (select @pids :=  {$parent}) t2
 ) t3 where ischild != 0 ORDER BY {$child_key}, {$parent_key}";
+    return $result;
   }
   // TODO 生成
   function generate_select_concat(array $columns)
@@ -434,8 +466,20 @@ VALUES
       if (!isset($row[$name]) || empty_not_zero($row[$name])) continue;
       // 过滤空查询条件
       if (empty($column->condition)) continue;
-
-      $result .= " AND `{$name}` " . str_replace("?", $row[$name], $column->condition);
+      // var_dump($column);
+      // var_dump($row[$name]);
+      // TODO 组合查询
+      // 多选 IN
+      if (substr(strtolower(trim($column->condition)), 0, 2) == 'in') {
+        $start = stripos($column->condition, "(");
+        $end = stripos($column->condition, ")");
+        $condition = substr($column->condition, $start + 1, $end - $start - 1);
+        $result .= " AND `{$name}` IN (" . implode(",", array_map(function ($item) use ($condition) {
+          return str_replace("?", $item, $condition);
+        }, (array)$row[$name])) . " )";
+      } else {
+        $result .= " AND `{$name}` " . str_replace("?", $row[$name], $column->condition);
+      }
     }
 
     return $result;
