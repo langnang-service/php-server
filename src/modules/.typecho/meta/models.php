@@ -1,6 +1,6 @@
 <?php
 
-namespace Langnang\Module\Typecho;
+namespace Langnang\Module\Meta;
 
 use Langnang\Module\Root\RootModel;
 

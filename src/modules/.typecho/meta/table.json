@@ -34,7 +34,11 @@
       "default": "option",
       "comment": "类型",
       "condition": "= '?'",
-      "options": ["option", "category", "tag"],
+      "options": [
+        "option",
+        "category",
+        "tag"
+      ],
       "modifiable": true
     },
     {
@@ -44,7 +48,10 @@
       "comment": "描述",
       "modifiable": true
     },
-    { "name": "count", "type": "int" },
+    {
+      "name": "count",
+      "type": "int"
+    },
     {
       "name": "order",
       "type": "int",
@@ -67,15 +74,35 @@
     {
       "name": "_relationships",
       "columns": [
-        { "name": "cid", "type": "int", "on": "cid" },
-        { "name": "mid", "type": "int", "as": "mids", "concat": "','" }
+        {
+          "name": "cid",
+          "type": "int",
+          "on": "cid"
+        },
+        {
+          "name": "mid",
+          "type": "int",
+          "as": "mids",
+          "concat": "','"
+        }
       ],
       "join": "left"
     }
   ],
-  "addition_columns": [{ "table": "_relationships", "name": "cid", "as": "cids" }],
-  "primary_keys": ["mid"],
-  "hierarchical_keys": ["mid", "parent"],
+  "addition_columns": [
+    {
+      "table": "_relationships",
+      "name": "cid",
+      "as": "cids"
+    }
+  ],
+  "primary_keys": [
+    "mid"
+  ],
+  "hierarchical_keys": [
+    "mid",
+    "parent"
+  ],
   "foreign_keys": [],
   "data": [
     {

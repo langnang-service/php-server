@@ -3,7 +3,7 @@
 namespace Langnang\Module\PublicApi;
 
 use Exception;
-use Langnang\Module\Typecho\Content;
+use Langnang\Module\Content\Content;
 use Langnang\Module\MySQL\MySqlTable;
 use Langnang\Module\Root\RootController;
 

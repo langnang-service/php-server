@@ -3,8 +3,7 @@ global $_SWAGGER;
 $module = "typecho/content";
 array_push($_SWAGGER, ["name" => "{$module}", "url" => "/?/api/swagger/{$module}", "path" => __DIR__]);
 
-use Langnang\Module\Typecho\Content;
-
+use Langnang\Module\Content\Content;
 
 require_once __DIR__ . '/controllers.php';
 /**
@@ -18,7 +17,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $controller = new Content();
   /**
    * @OA\Post(
-   *     path="/api/content/insert",
+   *     path="/api/typecho/content/insert",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -29,7 +28,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
   /**
    * @OA\Post(
-   *     path="/api/content/delete",
+   *     path="/api/typecho/content/delete",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -40,7 +39,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
   /**
    * @OA\Post(
-   *     path="/api/content/update",
+   *     path="/api/typecho/content/update",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -51,7 +50,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/update', [$controller, 'update_item']);
   /**
    * @OA\Post(
-   *     path="/api/content/count",
+   *     path="/api/typecho/content/count",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -62,7 +61,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/count', [$controller, 'select_count']);
   /**
    * @OA\Post(
-   *     path="/api/content/list",
+   *     path="/api/typecho/content/list",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -73,7 +72,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/list', [$controller, 'select_list']);
   /**
    * @OA\Post(
-   *     path="/api/content/tree",
+   *     path="/api/typecho/content/tree",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")
@@ -84,7 +83,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/tree', [$controller, 'select_tree']);
   /**
    * @OA\Post(
-   *     path="/api/content/info",
+   *     path="/api/typecho/content/info",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/ContentModel")

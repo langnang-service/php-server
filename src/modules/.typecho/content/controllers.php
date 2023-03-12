@@ -1,6 +1,6 @@
 <?php
 
-namespace Langnang\Module\Typecho;
+namespace Langnang\Module\Content;
 
 use Langnang\Module\Root\RootController;
 

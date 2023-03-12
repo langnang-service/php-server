@@ -18,7 +18,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $controller = new Comment();
   /**
    * @OA\Post(
-   *     path="/api/comment/insert",
+   *     path="/api/typecho/comment/insert",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -29,7 +29,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/insert', [$controller, 'insert_item']);
   /**
    * @OA\Post(
-   *     path="/api/comment/delete",
+   *     path="/api/typecho/comment/delete",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -40,7 +40,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/delete', [$controller, 'delete_list']);
   /**
    * @OA\Post(
-   *     path="/api/comment/update",
+   *     path="/api/typecho/comment/update",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -51,7 +51,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/update', [$controller, 'update_item']);
   /**
    * @OA\Post(
-   *     path="/api/comment/count",
+   *     path="/api/typecho/comment/count",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -62,7 +62,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/count', [$controller, 'select_count']);
   /**
    * @OA\Post(
-   *     path="/api/comment/list",
+   *     path="/api/typecho/comment/list",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -73,7 +73,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/list', [$controller, 'select_list']);
   /**
    * @OA\Post(
-   *     path="/api/comment/tree",
+   *     path="/api/typecho/comment/tree",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")
@@ -84,7 +84,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) {
   $router->addRoute('POST', '/tree', [$controller, 'select_tree']);
   /**
    * @OA\Post(
-   *     path="/api/comment/info",
+   *     path="/api/typecho/comment/info",
    *     @OA\RequestBody(
    *         required=true,
    *         @OA\JsonContent(ref="#/components/schemas/CommentModel")

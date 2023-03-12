@@ -1,6 +1,6 @@
 <?php
 
-namespace Langnang\Module\Typecho;
+namespace Langnang\Module\Comment;
 
 use Exception;
 use Langnang\Module\MySQL\MySqlTable;
