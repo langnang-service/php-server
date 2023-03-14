@@ -25,6 +25,51 @@ class Guide extends RootController
     }
     return $vars;
   }
+
+  function crawler_item($vars)
+  {
+    $url = $vars['url'];
+    $parse_url = parse_url($url);
+    $html = requests::get($url);
+    $title = selector::select($html, "//head/title");
+    $meta_contents = selector::select($html, "//head/meta[contains(@name,'desc')]/@content");
+    // 拼接图标路径
+    $icons = array_map(function ($item) use ($parse_url) {
+      $parse_icon = parse_url($item);
+      if (!isset($parse_icon['host'])) {
+        return $parse_url["scheme"] . "://" . $parse_url["host"] . "/" . $parse_icon['path'];
+      }
+      return $item;
+    }, (array)selector::select($html, "//head/link[contains(@rel,'icon')]/@href"));
+    // TODO
+    if ($vars['id']) {
+      // TODO 更新数据
+    }
+    return [
+      "title" => $title,
+      "icons" => (array)$icons,
+      "descriptions" => (array)$meta_contents,
+      // "parse_url" => $parse_url,
+      // "parse_icon" => parse_url(((array)$icons)[0]),
+      // "pathinfo_icon" => pathinfo(((array)$icons)[0]),
+    ];
+  }
+
+  function crawler_list($vars)
+  {
+    $ids = $vars['id'];
+    $rows = [];
+    foreach ($ids as $id) {
+      $row = $this->select_item(["id" => $id]);
+      $crawler_item = $this->crawler_item(["url" => $row['url']]);
+      $row['name'] = $crawler_item['title'] ? $crawler_item['title'] : null;
+      $row['icon'] = $crawler_item['icons'] ? $crawler_item['icons'][0] : null;
+      $row['description'] = $crawler_item['descriptions'] ? $crawler_item['descriptions'][0] : null;
+      $this->update_item($row);
+      array_push($rows, $row);
+    }
+    return $rows;
+  }
 }
 
 /**
@@ -60,30 +105,9 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) use 
   $router->addRoute('POST', '/delete_list', [new Guide(), 'delete_list']);
   $router->addRoute('POST', '/update_item', [new Guide(), 'update_item']);
 
+  $router->addRoute('POST', '/crawler_list', [new Guide(), 'crawler_list']);
 
-  $router->addRoute('POST', '/crawler', function ($vars) {
-    $url = $vars['url'];
-    $parse_url = parse_url($url);
-    $html = requests::get($url);
-    $title = selector::select($html, "//head/title");
-    $meta_contents = selector::select($html, "//head/meta[contains(@name,'desc')]/@content");
-    // 拼接图标路径
-    $icons = array_map(function ($item) use ($parse_url) {
-      $parse_icon = parse_url($item);
-      if (!isset($parse_icon['host'])) {
-        return $parse_url["scheme"] . "://" . $parse_url["host"] . "/" . $parse_icon['path'];
-      }
-      return $item;
-    }, (array)selector::select($html, "//head/link[contains(@rel,'icon')]/@href"));
-    return [
-      "title" => $title,
-      "icons" => (array)$icons,
-      "descriptions" => (array)$meta_contents,
-      // "parse_url" => $parse_url,
-      // "parse_icon" => parse_url(((array)$icons)[0]),
-      // "pathinfo_icon" => pathinfo(((array)$icons)[0]),
-    ];
-  });
+  $router->addRoute('POST', '/crawler_item', [new Guide(), 'crawler_item']);
 
   /**
    * @OA\Post(
