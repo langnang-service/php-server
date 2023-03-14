@@ -160,6 +160,7 @@ class RootController extends RootModel
   {
   }
 
+
   function execute_delete_item(array $vars)
   {
     global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
@@ -244,7 +245,31 @@ class RootController extends RootModel
     $_API_LOGGER->debug(__METHOD__, array('var'  => 'result', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
     return $result;
   }
+  // TODO 优化
+  function execute_update_list(array $vars)
+  {
+    $result = [];
+    foreach ($vars["_" . strtolower($vars['_method'])] as $item) {
+      $res = $this->execute_update_item($item);
+      array_push($result, $res);
+    }
+    return $result;
+  }
+  function update_list(array $vars)
+  {
+    global $_CONNECTION, $_API_LOGGER, $_API_LOGGER_UUID;
+    $vars = $this->before(__FUNCTION__, $vars);
 
+    $this->set__table(json_decode(file_get_contents($this->_table_path), true));
+    // 检测 primary_keys
+    foreach ($vars["_" . strtolower($vars['_method'])] as $item) {
+      if ($this->_table->primary_key_exists($item) !== true) throw new Exception("empty primary key ({$this->_table->primary_key_exists($item)}) value.");
+    }
+
+    $result = $this->execute_update_list($vars);
+    $_API_LOGGER->debug(__METHOD__, array('var'  => 'result', 'value'  => json_encode($result), "uuid" => $_API_LOGGER_UUID, "timestamp" => timestamp()));
+    return $result;
+  }
   // 执行操作>>计数查询
   function execute_select_count(array $vars)
   {
@@ -532,5 +557,9 @@ class RootController extends RootModel
       var_dump($sql);
     }
     throw new Exception("method not ready.");
+  }
+  // TODO
+  function upload_tree()
+  {
   }
 }

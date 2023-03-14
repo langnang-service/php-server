@@ -104,6 +104,7 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) use 
   $router->addRoute('POST', '/delete_item', [new Guide(), 'delete_item']);
   $router->addRoute('POST', '/delete_list', [new Guide(), 'delete_list']);
   $router->addRoute('POST', '/update_item', [new Guide(), 'update_item']);
+  $router->addRoute('POST', '/update_list', [new Guide(), 'update_list']);
 
   $router->addRoute('POST', '/crawler_list', [new Guide(), 'crawler_list']);
 
