@@ -59,21 +59,32 @@ $router->addGroup("/{$module}", function (FastRoute\RouteCollector $router) use 
   $router->addRoute('POST', '/delete_item', [new Guide(), 'delete_item']);
   $router->addRoute('POST', '/delete_list', [new Guide(), 'delete_list']);
   $router->addRoute('POST', '/update_item', [new Guide(), 'update_item']);
+
+
   $router->addRoute('POST', '/crawler', function ($vars) {
     $url = $vars['url'];
+    $parse_url = parse_url($url);
     $html = requests::get($url);
     $title = selector::select($html, "//head/title");
-    $metas = selector::select($html, "//head/meta");
-    $icons = selector::select($html, "//head/link[contains(@rel,'icon')]");
-    $icons = array_map(function ($item) {
-      return ["link" => selector::select($item, "/@href")];
-    }, (array)$icons);
+    $meta_contents = selector::select($html, "//head/meta[contains(@name,'desc')]/@content");
+    // 拼接图标路径
+    $icons = array_map(function ($item) use ($parse_url) {
+      $parse_icon = parse_url($item);
+      if (!isset($parse_icon['host'])) {
+        return $parse_url["scheme"] . "://" . $parse_url["host"] . "/" . $parse_icon['path'];
+      }
+      return $item;
+    }, (array)selector::select($html, "//head/link[contains(@rel,'icon')]/@href"));
     return [
       "title" => $title,
-      "icons" => $icons,
-      "metas" => $metas,
+      "icons" => (array)$icons,
+      "descriptions" => (array)$meta_contents,
+      // "parse_url" => $parse_url,
+      // "parse_icon" => parse_url(((array)$icons)[0]),
+      // "pathinfo_icon" => pathinfo(((array)$icons)[0]),
     ];
   });
+
   /**
    * @OA\Post(
    *     path="/api/guide/select_list",
