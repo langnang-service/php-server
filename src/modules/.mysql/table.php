@@ -427,7 +427,8 @@ VALUES
     if (t1.{$child_key} = {$parent}, {$parent}, 0)) as ischild
   from (select t.* from`{$this->name}` t  " . $this->generate_where_condition($row, $this->hierarchical_keys) . " ORDER BY {$parent_key}, {$child_key} ) t1,
   (select @pids :=  {$parent}) t2
-) t3 where ischild != 0 ORDER BY {$parent_key}, {$child_key} ";
+  ORDER BY {$parent_key}, {$child_key} 
+) t3 where ischild != '0' ";
     return $result;
   }
   // TODO 生成
